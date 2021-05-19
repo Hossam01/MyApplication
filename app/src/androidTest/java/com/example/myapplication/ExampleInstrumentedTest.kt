@@ -1,5 +1,7 @@
 package com.example.myapplication
 
+import android.content.Context
+import android.net.ConnectivityManager
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 
@@ -15,10 +17,19 @@ import org.junit.Assert.*
  */
 @RunWith(AndroidJUnit4::class)
 class ExampleInstrumentedTest {
+
+    fun checkOnlineState(): Boolean {
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+        val CManager = appContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+        val NInfo = CManager!!.activeNetworkInfo
+        return if (NInfo != null && NInfo.isConnectedOrConnecting) {
+            true
+        } else false
+    }
     @Test
     fun useAppContext() {
         // Context of the app under test.
-        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.example.myapplication", appContext.packageName)
+        assertEquals(true, checkOnlineState())
+
     }
 }
